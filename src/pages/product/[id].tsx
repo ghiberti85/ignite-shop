@@ -1,4 +1,4 @@
-import { ImageContainer, ProductContainer, ProductDetails } from "@/styles/pages/product"
+import { ImageContainer, ProductContainer, ProductDetails } from "../../styles/pages/product"
 import { GetStaticPaths, GetStaticProps } from "next"
 import Image from "next/image"
 import Stripe from "stripe"
@@ -11,11 +11,14 @@ interface ProductProps {
         imageUrl: string;
         price: string;
         description: string;
+        defaultPriceId: string;
     }
 }
 
 export default function Product({ product }: ProductProps) {
-
+    function handleBuyProduct() {
+        console.log(product.defaultPriceId);
+    }
     return (
         <ProductContainer>
             <ImageContainer>
@@ -27,7 +30,7 @@ export default function Product({ product }: ProductProps) {
 
                 <p>{product.description}</p>
 
-                <button>
+                <button onClick={handleBuyProduct}>
                     Comprar agora
                 </button>
             </ProductDetails>
@@ -40,7 +43,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
         paths: [
             { params: { id: 'prod_P6Y8bAoIyt8Hjq' } }
         ],
-        fallback: true,
+        fallback: 'blocking',
     }
 }
 
@@ -64,6 +67,7 @@ export const getStaticProps: GetStaticProps<any, { id: string }> = async ({ para
                     currency: 'BRL',
                 }).format(price.unit_amount / 100),
                 description: product.description,
+                defaultPriceId: price.id,
             }
         },
         revalidate: 60 * 60 * 1, // 1 hour
