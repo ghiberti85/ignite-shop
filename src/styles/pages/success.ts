@@ -19,6 +19,7 @@ export const SuccessContainer = styled('main', {
         maxWidth: 560,
         textAlign: 'center',
         marginTop: '2rem',
+        lineHeight: 1.4,
     },
 
     a: {
